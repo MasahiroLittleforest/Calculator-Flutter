@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/output_provider.dart';
@@ -85,73 +86,81 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
           width: _buttonWidth,
           height: _buttonHeight,
           padding: const EdgeInsets.all(10.0),
-          // child: Listener(
-          //   onPointerDown: (event) {
-          //     _onPointerDown(event: event);
-          //     _onTapped(buttonText: widget.text, output: output);
-          //   },
-          //   onPointerUp: (event) {
-          //     _onPointerUp(event: event);
-          //   },
-          child: GestureDetector(
-            onTapDown: (details) {
-              print('Tap down');
+          child: Listener(
+            onPointerDown: (event) {
               setState(() {
                 _isPressed = true;
               });
+              print('onPointerDown');
             },
-            onTapUp: (details) {
-              print('Tap up');
+            onPointerUp: (event) {
               setState(() {
                 _isPressed = false;
               });
               output.onTapped(buttonText: widget.text);
+              print('onPointerUp');
             },
-            onLongPress: () {
-              print('Long press');
-              if (widget.text == 'DEL') {
-                output.clear();
-              }
-            },
-            onLongPressStart: (details) {
-              print('Long press start');
-              setState(() {
-                _isLongPressed = true;
-              });
-            },
-            onLongPressEnd: (details) {
-              print('Long press end');
-              setState(() {
-                _isPressed = false;
-                _isLongPressed = false;
-              });
-              if (widget.text != 'DEL') {
-                output.onTapped(buttonText: widget.text);
-              }
-            },
-            child: NeumorphicAnimatedContainer(
-              buttonText: widget.text,
-              width: _buttonWidth,
-              height: _buttonHeight,
-              color: _color,
-              child: Container(
-                height: widget.height,
-                child: Center(
-                  child: Text(
-                    widget.text,
-                    style: TextStyle(
-                      fontSize: _getTextSize(
-                        buttonText: widget.text,
-                        buttonSize: _buttonSize,
+            child: GestureDetector(
+              // onTapDown: (details) {
+              //   print('Tap down');
+              //   setState(() {
+              //     _isPressed = true;
+              //   });
+              // },
+              // onTapUp: (details) {
+              //   print('Tap up');
+              //   setState(() {
+              //     _isPressed = false;
+              //   });
+              //   output.onTapped(buttonText: widget.text);
+              // },
+              onLongPressStart: (details) {
+                print('Long press start');
+                setState(() {
+                  _isPressed = true;
+                  _isLongPressed = true;
+                });
+              },
+              onLongPress: () async {
+                print('Long press');
+                if (widget.text == 'DEL') {
+                  output.clear();
+                }
+              },
+              onLongPressEnd: (details) {
+                print('Long press end');
+                setState(() {
+                  _isPressed = false;
+                  _isLongPressed = false;
+                });
+                // if (widget.text != 'DEL') {
+                //   output.onTapped(buttonText: widget.text);
+                // }
+              },
+              child: NeumorphicAnimatedContainer(
+                buttonText: widget.text,
+                width: _buttonWidth,
+                height: _buttonHeight,
+                color: _color,
+                child: Container(
+                  height: widget.height,
+                  child: Center(
+                    child: Text(
+                      widget.text,
+                      style: TextStyle(
+                        fontSize: _getTextSize(
+                          buttonText: widget.text,
+                          buttonSize: _buttonSize,
+                        ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueGrey[700],
                       ),
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueGrey[700],
                     ),
                   ),
                 ),
+                isPressed: _isPressed,
+                isLongPressed: _isLongPressed,
               ),
-              isPressed: _isPressed,
-              isLongPressed: _isLongPressed,
             ),
           ),
         );

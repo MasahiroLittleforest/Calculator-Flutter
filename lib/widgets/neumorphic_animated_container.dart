@@ -15,7 +15,7 @@ class NeumorphicAnimatedContainer extends StatefulWidget {
   final String buttonText;
 
   NeumorphicAnimatedContainer({
-    this.duration = const Duration(milliseconds: 80),
+    this.duration = const Duration(milliseconds: 20),
     this.width,
     this.height,
     this.padding = const EdgeInsets.all(10.0),
@@ -80,7 +80,7 @@ class _NeumorphicAnimatedContainerState
     final Color _color =
         widget.color == null ? Theme.of(context).backgroundColor : widget.color;
     return AnimatedContainer(
-      duration: widget.duration,
+      duration: const Duration(milliseconds: 20),
       width: widget.width,
       height: widget.height,
       padding: widget.padding,
