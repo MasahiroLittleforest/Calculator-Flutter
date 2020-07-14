@@ -50,9 +50,9 @@ class _NeumorphicAnimatedContainerState
           1.2,
         ],
         colors: [
-          Colors.orange[400],
-          Colors.amber,
-          Colors.orange[100],
+          Colors.tealAccent[700],
+          Colors.tealAccent[400],
+          Colors.tealAccent,
         ],
       );
     } else if (isPressed) {
