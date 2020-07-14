@@ -87,7 +87,8 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
           height: _buttonHeight,
           padding: const EdgeInsets.all(10.0),
           child: Listener(
-            onPointerDown: (event) {
+            onPointerDown: (event) async {
+              HapticFeedback.lightImpact();
               setState(() {
                 _isPressed = true;
               });
@@ -124,6 +125,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
               onLongPress: () async {
                 print('Long press');
                 if (widget.text == 'DEL') {
+                  HapticFeedback.heavyImpact();
                   output.clear();
                 }
               },
