@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../widgets/app_drawer.dart';
 import '../widgets/buttons.dart';
@@ -28,31 +27,22 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.blueGrey[50],
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: Colors.blueGrey[50],
-        drawer: AppDrawer(),
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 20.0),
-                _buildOutputDisplay(),
-                const SizedBox(height: 15.0),
-                Buttons(),
-                const SizedBox(height: 15.0),
-              ],
-            ),
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: AppDrawer(),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(height: 20.0),
+              _buildOutputDisplay(),
+              const SizedBox(height: 15.0),
+              Buttons(),
+              const SizedBox(height: 15.0),
+            ],
           ),
         ),
       ),

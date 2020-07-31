@@ -12,7 +12,6 @@ class NeumorphicButton extends StatefulWidget {
   final int flex;
   final double bevel;
   final Offset blurOffset;
-  final Color color;
 
   NeumorphicButton({
     this.width,
@@ -20,7 +19,6 @@ class NeumorphicButton extends StatefulWidget {
     @required this.text,
     this.flex = 1,
     this.bevel = 10,
-    this.color,
   }) : this.blurOffset = Offset(bevel / 2, bevel / 2);
 
   @override
@@ -30,7 +28,6 @@ class NeumorphicButton extends StatefulWidget {
 class _NeumorphicButtonState extends State<NeumorphicButton> {
   bool _isPressed = false;
   bool _isLongPressed = false;
-  Color _color;
 
   double _getButtonSize() {
     final double _displayWidth = MediaQuery.of(context).size.width;
@@ -65,16 +62,6 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
   }
 
   @override
-  void initState() {
-    if (widget.color == null) {
-      _color = Colors.blueGrey[50];
-    } else {
-      _color = widget.color;
-    }
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final double _buttonSize = _getButtonSize();
     final double _buttonWidth =
@@ -102,19 +89,6 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
               print('onPointerUp');
             },
             child: GestureDetector(
-              // onTapDown: (details) {
-              //   print('Tap down');
-              //   setState(() {
-              //     _isPressed = true;
-              //   });
-              // },
-              // onTapUp: (details) {
-              //   print('Tap up');
-              //   setState(() {
-              //     _isPressed = false;
-              //   });
-              //   output.onTapped(buttonText: widget.text);
-              // },
               onLongPressStart: (details) {
                 print('Long press start');
                 setState(() {
@@ -135,15 +109,11 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                   _isPressed = false;
                   _isLongPressed = false;
                 });
-                // if (widget.text != 'DEL') {
-                //   output.onTapped(buttonText: widget.text);
-                // }
               },
               child: NeumorphicAnimatedContainer(
                 buttonText: widget.text,
                 width: _buttonWidth,
                 height: _buttonHeight,
-                color: _color,
                 child: Container(
                   height: widget.height,
                   child: Center(
@@ -155,7 +125,6 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                           buttonSize: _buttonSize,
                         ),
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey[700],
                       ),
                     ),
                   ),
