@@ -17,27 +17,48 @@ class NeumorphicEmbossContainer extends StatelessWidget {
     this.child,
   });
 
+  List<BoxShadow> getBoxShadows({@required BuildContext context}) {
+    final Brightness _brightness = Theme.of(context).brightness;
+    final List<BoxShadow> lightThemeBoxShadows = [
+      BoxShadow(
+        offset: Offset(bevel / 4, bevel / 4),
+        color: Colors.white,
+        blurRadius: bevel / 4,
+      ),
+      BoxShadow(
+        offset: Offset(-bevel / 4, -bevel / 4),
+        color: Colors.blueGrey[300],
+        blurRadius: bevel / 4,
+      ),
+    ];
+    final List<BoxShadow> darkThemeBoxShadows = [
+      BoxShadow(
+        offset: Offset(bevel / 4, bevel / 4),
+        color: Colors.grey[800],
+        blurRadius: bevel / 4,
+      ),
+      BoxShadow(
+        offset: Offset(-bevel / 4, -bevel / 4),
+        color: Colors.black,
+        blurRadius: bevel / 4,
+      ),
+    ];
+    if (_brightness == Brightness.light) {
+      return lightThemeBoxShadows;
+    } else {
+      return darkThemeBoxShadows;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Color _color = color == null ? Colors.blueGrey[50] : color;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: _color,
+        color: color,
         borderRadius: BorderRadius.circular(radius),
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(bevel / 4, bevel / 4),
-            color: Colors.white,
-            blurRadius: bevel / 4,
-          ),
-          BoxShadow(
-            offset: Offset(-bevel / 4, -bevel / 4),
-            color: Colors.blueGrey[300],
-            blurRadius: bevel / 4,
-          ),
-        ],
+        boxShadow: getBoxShadows(context: context),
       ),
       child: child,
     );

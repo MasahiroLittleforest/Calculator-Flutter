@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info/package_info.dart';
 
 import './neumorphic_container.dart';
+import '../screens/settings_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   void _launchUrl() async {
@@ -29,10 +30,37 @@ class AppDrawer extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
+                      'Settings',
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: Theme.of(context).textTheme.bodyText2.color,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return SettingsScreen();
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              title: NeumorphicContainer(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
                       'Licenses',
                       style: TextStyle(
                         fontSize: 22.0,
-                        color: Colors.blueGrey[700],
+                        color: Theme.of(context).textTheme.bodyText2.color,
                       ),
                     ),
                   ),
@@ -68,7 +96,7 @@ class AppDrawer extends StatelessWidget {
                       'Privacy policy',
                       style: TextStyle(
                         fontSize: 22.0,
-                        color: Colors.blueGrey[700],
+                        color: Theme.of(context).textTheme.bodyText2.color,
                       ),
                     ),
                   ),

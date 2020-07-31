@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/theme_provider.dart';
 import '../providers/output_provider.dart';
 import './neumorphic_emboss_container.dart';
 
 class OutputDisplay extends StatefulWidget {
   final double height;
-  final Color color;
 
   OutputDisplay({
     this.height = 120.0,
-    this.color,
   });
 
   @override
@@ -22,9 +21,9 @@ class _OutputDisplayState extends State<OutputDisplay>
   double _getContainerWidth() {
     final double _displayWidth = MediaQuery.of(context).size.width;
     final double _displayHeight = MediaQuery.of(context).size.height;
-    double _buttonSize;
+    double _buttonSize = 0;
     final double _buttonHorizontalPadding = 20;
-    double width;
+    double width = 0;
     if (_displayHeight / _displayWidth >= 16 / 10) {
       _buttonSize = _displayWidth / 4.4;
     } else {
@@ -52,7 +51,6 @@ class _OutputDisplayState extends State<OutputDisplay>
       style: TextStyle(
         fontSize: MediaQuery.of(context).size.width * 0.09,
         fontWeight: FontWeight.bold,
-        color: Colors.blueGrey[700],
       ),
     );
   }
@@ -63,15 +61,16 @@ class _OutputDisplayState extends State<OutputDisplay>
       style: TextStyle(
         fontSize: MediaQuery.of(context).size.width * 0.07,
         fontWeight: FontWeight.bold,
-        color: Colors.blueGrey,
+        color: Theme.of(context).textTheme.headline1.color,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
     final Color _color =
-        widget.color == null ? Colors.blueGrey[100] : widget.color;
+        _themeProvider.isDarkTheme ? Colors.grey[850] : Colors.blueGrey[100];
     return Consumer<Output>(
       builder: (BuildContext context, Output output, _) {
         return NeumorphicEmbossContainer(
