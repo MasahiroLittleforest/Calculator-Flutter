@@ -28,6 +28,7 @@ class NeumorphicButton extends StatefulWidget {
 class _NeumorphicButtonState extends State<NeumorphicButton> {
   bool _isPressed = false;
   bool _isLongPressed = false;
+  Color _buttonTextColor;
 
   double _getButtonSize() {
     final double _displayWidth = MediaQuery.of(context).size.width;
@@ -78,12 +79,14 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
               HapticFeedback.lightImpact();
               setState(() {
                 _isPressed = true;
+                _buttonTextColor = Colors.cyan;
               });
               print('onPointerDown');
             },
             onPointerUp: (event) {
               setState(() {
                 _isPressed = false;
+                _buttonTextColor = null;
               });
               output.onTapped(buttonText: widget.text);
               print('onPointerUp');
@@ -99,6 +102,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
               onLongPress: () async {
                 print('Long press');
                 if (widget.text == 'DEL') {
+                  _buttonTextColor = Colors.grey[800];
                   HapticFeedback.heavyImpact();
                   output.clear();
                 }
@@ -125,6 +129,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                           buttonSize: _buttonSize,
                         ),
                         fontWeight: FontWeight.bold,
+                        color: _buttonTextColor,
                       ),
                     ),
                   ),
