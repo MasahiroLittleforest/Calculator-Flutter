@@ -57,6 +57,9 @@ class ThemeProvider with ChangeNotifier {
     accentColor: Colors.blueGrey[700],
     appBarTheme: AppBarTheme(
       brightness: Brightness.light,
+      iconTheme: IconThemeData(
+        color: Colors.blueGrey[700],
+      ),
     ),
     textTheme: TextTheme(
       bodyText2: TextStyle(
@@ -64,6 +67,9 @@ class ThemeProvider with ChangeNotifier {
       ),
       headline1: TextStyle(
         color: Colors.blueGrey,
+      ),
+      subtitle1: TextStyle(
+        color: Colors.blueGrey[800],
       ),
     ),
   );
