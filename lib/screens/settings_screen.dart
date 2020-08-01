@@ -8,13 +8,9 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: IconThemeData(
-          color: Theme.of(context).iconTheme.color,
-        ),
       ),
       body: Column(
         children: <Widget>[
@@ -23,6 +19,8 @@ class SettingsScreen extends StatelessWidget {
               'Theme',
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText2.color,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
           ),
