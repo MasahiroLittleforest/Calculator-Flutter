@@ -8,12 +8,10 @@ class Output with ChangeNotifier {
 
   String get equationText => _equationText;
   String get resultText => _resultText;
-
   String get equationLastCharacter => getEquationLastCharacter();
 
   set equationText(String value) {
     _equationText = value;
-    _resultNum = double.tryParse(value);
     notifyListeners();
   }
 
@@ -30,8 +28,8 @@ class Output with ChangeNotifier {
       return;
     }
     _equationText = _resultText;
-    _resultText = '';
     _resultNum = double.tryParse(_resultText);
+    _resultText = '';
     notifyListeners();
   }
 
@@ -64,18 +62,23 @@ class Output with ChangeNotifier {
     }
   }
 
-  void clear() {
+  void clearAll() {
     _equationText = '';
     _resultText = '';
+    _resultNum = 0;
     notifyListeners();
   }
 
   void delete() {
+    if (_equationText.length <= 1) {
+      clearAll();
+      return;
+    }
     if (_equationText == null || _equationText.length == 0) {
       return;
     }
     if (_equationText == 'Error') {
-      clear();
+      clearAll();
       return;
     }
     _equationText = _equationText.substring(0, _equationText.length - 1);
@@ -130,7 +133,7 @@ class Output with ChangeNotifier {
       }
     } else {
       // 頭に0が2つ以上並ばないようにする
-      if (resultText == '0' && buttonText == '0') {
+      if (_resultText == '0' && buttonText == '0') {
         equationText = buttonText;
       } else if (checkIfTextIsOperator(text: buttonText)) {
         // 1つ前が演算子の時
@@ -146,5 +149,6 @@ class Output with ChangeNotifier {
     }
     print('Equation text: $equationText');
     print('Result text: $resultText');
+    print('result: $_resultNum');
   }
 }

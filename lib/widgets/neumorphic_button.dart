@@ -104,7 +104,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                 if (widget.text == 'DEL') {
                   _buttonTextColor = Colors.grey[800];
                   HapticFeedback.heavyImpact();
-                  output.clear();
+                  output.clearAll();
                 }
               },
               onLongPressEnd: (details) {
