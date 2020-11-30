@@ -27,7 +27,7 @@ class SettingsScreen extends StatelessWidget {
           SwitchListTile(
             title: const Text('Dark theme'),
             value: _themeProvider.isDarkTheme,
-            onChanged: _themeProvider.useDeviceTheme
+            onChanged: _themeProvider.usesDeviceTheme
                 ? null
                 : (bool newVal) {
                     _themeProvider.isDarkTheme = newVal;
@@ -35,10 +35,10 @@ class SettingsScreen extends StatelessWidget {
           ),
           SwitchListTile(
             title: const Text('Use device theme'),
-            value: _themeProvider.useDeviceTheme,
+            value: _themeProvider.usesDeviceTheme,
             onChanged: (bool newVal) {
-              _themeProvider.useDeviceTheme = newVal;
-              if (_themeProvider.useDeviceTheme) {
+              _themeProvider.usesDeviceTheme = newVal;
+              if (_themeProvider.usesDeviceTheme) {
                 _themeProvider.isDarkTheme =
                     MediaQuery.of(context).platformBrightness ==
                         Brightness.dark;

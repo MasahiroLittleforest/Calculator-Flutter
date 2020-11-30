@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         Provider.of<ThemeProvider>(context, listen: false);
     final Brightness _deviceBrightness =
         WidgetsBinding.instance.window.platformBrightness;
-    if (_themeProvider.useDeviceTheme) {
+    if (_themeProvider.usesDeviceTheme) {
       _themeProvider.isDarkTheme = _deviceBrightness == Brightness.dark;
     }
     super.didChangePlatformBrightness();
@@ -89,7 +89,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Neumorphic Calculator',
-          theme: _themeProvider.currentThemeData,
+          themeMode: _themeProvider.themeMode,
+          theme: ThemeProvider.lightThemeData,
+          darkTheme: ThemeProvider.darkThemeData,
           home: CalculatorScreen(),
         ),
       ),

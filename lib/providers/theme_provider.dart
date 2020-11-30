@@ -9,8 +9,9 @@ class ThemeProvider with ChangeNotifier {
     @required this.sharedPreferences,
     @required BuildContext context,
   }) {
-    this.useDeviceTheme =
-        sharedPreferences.getBool(SharedPreferencesKeys.useDeviceTheme) ?? true;
+    this.usesDeviceTheme =
+        sharedPreferences.getBool(SharedPreferencesKeys.usesDeviceTheme) ??
+            true;
     this.isDarkTheme =
         sharedPreferences.getBool(SharedPreferencesKeys.isDarkTheme) ?? false;
   }
@@ -20,34 +21,43 @@ class ThemeProvider with ChangeNotifier {
   bool _useDeviceTheme;
 
   bool get isDarkTheme => _isDarkTheme;
-  bool get useDeviceTheme => _useDeviceTheme;
+  bool get usesDeviceTheme => _useDeviceTheme;
 
-  ThemeData get currentThemeData =>
-      _isDarkTheme ? darkThemeData : lightThemeData;
+  ThemeMode get themeMode {
+    if (this.usesDeviceTheme) {
+      return ThemeMode.system;
+    }
+    if (this.isDarkTheme) {
+      return ThemeMode.dark;
+    } else {
+      return ThemeMode.light;
+    }
+  }
 
   set isDarkTheme(bool value) {
     _isDarkTheme = value;
     notifyListeners();
-    saveTheme(isDarkTheme: value);
+    (() async {
+      sharedPreferences.setBool(
+        SharedPreferencesKeys.isDarkTheme,
+        isDarkTheme,
+      );
+    })();
     print('Is dark theme: $isDarkTheme');
-    print('Use device theme: $useDeviceTheme');
+    print('Use device theme: $usesDeviceTheme');
   }
 
-  set useDeviceTheme(bool value) {
+  set usesDeviceTheme(bool value) {
     _useDeviceTheme = value;
     notifyListeners();
     (() async {
       sharedPreferences.setBool(
-        SharedPreferencesKeys.useDeviceTheme,
-        useDeviceTheme,
+        SharedPreferencesKeys.usesDeviceTheme,
+        usesDeviceTheme,
       );
     })();
     print('Is dark theme: $isDarkTheme');
-    print('Use device theme: $useDeviceTheme');
-  }
-
-  Future<void> saveTheme({@required bool isDarkTheme}) async {
-    sharedPreferences.setBool(SharedPreferencesKeys.isDarkTheme, isDarkTheme);
+    print('Use device theme: $usesDeviceTheme');
   }
 
   static final ThemeData lightThemeData = ThemeData(
