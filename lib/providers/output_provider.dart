@@ -46,9 +46,12 @@ class Output with ChangeNotifier {
     }
   }
 
+  String _convertOperators() {
+    return _equationText.replaceAll('×', '*').replaceAll('÷', '/');
+  }
+
   void autoCalculate() {
-    String _formattedEquation =
-        _equationText.replaceAll('×', '*').replaceAll('÷', '/');
+    String _formattedEquation = _convertOperators();
     print('Formatted equation: $_formattedEquation');
     if (checkIfTextIsOperator(text: equationLastCharacter)) {
       _formattedEquation =
