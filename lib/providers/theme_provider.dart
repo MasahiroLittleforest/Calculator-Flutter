@@ -9,8 +9,9 @@ class ThemeProvider with ChangeNotifier {
     @required this.sharedPreferences,
     @required BuildContext context,
   }) {
-    this.useDeviceTheme =
-        sharedPreferences.getBool(SharedPreferencesKeys.useDeviceTheme) ?? true;
+    this.usesDeviceTheme =
+        sharedPreferences.getBool(SharedPreferencesKeys.usesDeviceTheme) ??
+            true;
     this.isDarkTheme =
         sharedPreferences.getBool(SharedPreferencesKeys.isDarkTheme) ?? false;
   }
@@ -20,34 +21,43 @@ class ThemeProvider with ChangeNotifier {
   bool _useDeviceTheme;
 
   bool get isDarkTheme => _isDarkTheme;
-  bool get useDeviceTheme => _useDeviceTheme;
+  bool get usesDeviceTheme => _useDeviceTheme;
 
-  ThemeData get currentThemeData =>
-      _isDarkTheme ? darkThemeData : lightThemeData;
+  ThemeMode get themeMode {
+    if (this.usesDeviceTheme) {
+      return ThemeMode.system;
+    }
+    if (this.isDarkTheme) {
+      return ThemeMode.dark;
+    } else {
+      return ThemeMode.light;
+    }
+  }
 
   set isDarkTheme(bool value) {
     _isDarkTheme = value;
     notifyListeners();
-    saveTheme(isDarkTheme: value);
+    (() async {
+      sharedPreferences.setBool(
+        SharedPreferencesKeys.isDarkTheme,
+        isDarkTheme,
+      );
+    })();
     print('Is dark theme: $isDarkTheme');
-    print('Use device theme: $useDeviceTheme');
+    print('Use device theme: $usesDeviceTheme');
   }
 
-  set useDeviceTheme(bool value) {
+  set usesDeviceTheme(bool value) {
     _useDeviceTheme = value;
     notifyListeners();
     (() async {
       sharedPreferences.setBool(
-        SharedPreferencesKeys.useDeviceTheme,
-        useDeviceTheme,
+        SharedPreferencesKeys.usesDeviceTheme,
+        usesDeviceTheme,
       );
     })();
     print('Is dark theme: $isDarkTheme');
-    print('Use device theme: $useDeviceTheme');
-  }
-
-  Future<void> saveTheme({@required bool isDarkTheme}) async {
-    sharedPreferences.setBool(SharedPreferencesKeys.isDarkTheme, isDarkTheme);
+    print('Use device theme: $usesDeviceTheme');
   }
 
   static final ThemeData lightThemeData = ThemeData(
@@ -57,6 +67,7 @@ class ThemeProvider with ChangeNotifier {
     accentColor: Colors.blueGrey[700],
     appBarTheme: AppBarTheme(
       brightness: Brightness.light,
+      color: Colors.transparent,
       iconTheme: IconThemeData(
         color: Colors.blueGrey[700],
       ),
@@ -80,6 +91,7 @@ class ThemeProvider with ChangeNotifier {
     accentColor: Colors.grey[400],
     appBarTheme: AppBarTheme(
       brightness: Brightness.dark,
+      color: Colors.transparent,
     ),
     textTheme: TextTheme(
       bodyText2: TextStyle(
@@ -91,9 +103,12 @@ class ThemeProvider with ChangeNotifier {
     ),
   );
 
-  final SystemUiOverlayStyle systemUiOverlayStyleForLight =
-      SystemUiOverlayStyle(
+  static final SystemUiOverlayStyle _systemUiOverlayStyleForLight =
+      SystemUiOverlayStyle.dark.copyWith(
+    // Only in iOS
+    statusBarBrightness: Brightness.light,
     // Only Android && M+
+    statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,
     // Only Android && O+
     systemNavigationBarColor: lightThemeData.scaffoldBackgroundColor,
@@ -103,9 +118,12 @@ class ThemeProvider with ChangeNotifier {
     systemNavigationBarIconBrightness: Brightness.dark,
   );
 
-  final SystemUiOverlayStyle systemUiOverlayStyleForDark =
+  static final SystemUiOverlayStyle _systemUiOverlayStyleForDark =
       SystemUiOverlayStyle.light.copyWith(
+    // Only in iOS
+    statusBarBrightness: Brightness.dark,
     // Only Android && M+
+    statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
     // Only Android && O+
     systemNavigationBarColor: darkThemeData.scaffoldBackgroundColor,
@@ -115,6 +133,7 @@ class ThemeProvider with ChangeNotifier {
     systemNavigationBarIconBrightness: Brightness.light,
   );
 
-  SystemUiOverlayStyle get systemUiOverlayStyle =>
-      _isDarkTheme ? systemUiOverlayStyleForDark : systemUiOverlayStyleForLight;
+  SystemUiOverlayStyle get systemUiOverlayStyle => _isDarkTheme
+      ? _systemUiOverlayStyleForDark
+      : _systemUiOverlayStyleForLight;
 }

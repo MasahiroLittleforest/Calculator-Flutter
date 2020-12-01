@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +12,7 @@ import './providers/theme_provider.dart';
 import './providers/output_provider.dart';
 import './screens/calculator_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -17,33 +20,37 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ),
-  );
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent,
+  //   ),
+  // );
 
-  // Set `enableInDevMode` to true to see reports while in debug mode
-  // This is only to be used for confirming that reports are being
-  // submitted as expected. It is not intended to be used for everyday
-  // development.
-  final Crashlytics _crashlytics = Crashlytics.instance;
-  _crashlytics.enableInDevMode = true;
-  // Pass all uncaught errors from the framework to Crashlytics.
+  final FirebaseCrashlytics _crashlytics = FirebaseCrashlytics.instance;
   FlutterError.onError = _crashlytics.recordFlutterError;
+  await _crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
 
-  final SharedPreferences _sharedPreferences =
-      await SharedPreferences.getInstance();
-  runApp(
-    ChangeNotifierProvider(
-      create: (BuildContext context) {
-        return ThemeProvider(
-          sharedPreferences: _sharedPreferences,
-          context: context,
-        );
-      },
-      child: MyApp(),
-    ),
+  await runZonedGuarded(
+    () async {
+      FlutterError.onError = _crashlytics.recordFlutterError;
+      final SharedPreferences _sharedPreferences =
+          await SharedPreferences.getInstance();
+      runApp(
+        ChangeNotifierProvider(
+          create: (BuildContext context) {
+            return ThemeProvider(
+              sharedPreferences: _sharedPreferences,
+              context: context,
+            );
+          },
+          child: MyApp(),
+        ),
+      );
+    },
+    (error, stackTrace) {
+      print('runZonedGuarded: Caught error in my root zone.');
+      _crashlytics.recordError(error, stackTrace);
+    },
   );
 }
 
@@ -65,7 +72,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         Provider.of<ThemeProvider>(context, listen: false);
     final Brightness _deviceBrightness =
         WidgetsBinding.instance.window.platformBrightness;
-    if (_themeProvider.useDeviceTheme) {
+    if (_themeProvider.usesDeviceTheme) {
       _themeProvider.isDarkTheme = _deviceBrightness == Brightness.dark;
     }
     super.didChangePlatformBrightness();
@@ -89,7 +96,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Neumorphic Calculator',
-          theme: _themeProvider.currentThemeData,
+          themeMode: _themeProvider.themeMode,
+          theme: ThemeProvider.lightThemeData,
+          darkTheme: ThemeProvider.darkThemeData,
           home: CalculatorScreen(),
         ),
       ),

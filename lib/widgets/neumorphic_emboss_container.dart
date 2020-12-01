@@ -26,7 +26,7 @@ class NeumorphicEmbossContainer extends StatelessWidget {
         blurRadius: bevel / 4,
       ),
       BoxShadow(
-        offset: Offset(-bevel / 4, -bevel / 4),
+        offset: Offset(-(bevel / 4), -(bevel / 4)),
         color: Colors.blueGrey[300],
         blurRadius: bevel / 4,
       ),
@@ -38,7 +38,7 @@ class NeumorphicEmbossContainer extends StatelessWidget {
         blurRadius: bevel / 4,
       ),
       BoxShadow(
-        offset: Offset(-bevel / 4, -bevel / 4),
+        offset: Offset(-(bevel / 4), -(bevel / 4)),
         color: Colors.black,
         blurRadius: bevel / 4,
       ),
