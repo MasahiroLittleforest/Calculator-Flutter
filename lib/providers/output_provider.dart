@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 class Output with ChangeNotifier {
@@ -8,6 +9,7 @@ class Output with ChangeNotifier {
   String _resultText = '';
   double _resultNum = 0;
   bool _isTypingAfterDecimalPoint = false;
+  final NumberFormat _numberFormat = NumberFormat('#,###');
 
   String get equationText => _equationText;
   String get resultText => _resultText;
@@ -67,8 +69,8 @@ class Output with ChangeNotifier {
       final ContextModel _contextModel = ContextModel();
       _resultNum = _expression.evaluate(EvaluationType.REAL, _contextModel);
       final int _precision = pow(10, 10);
-      final String _result =
-          ((_resultNum * _precision).round() / _precision).toString();
+      _resultNum = ((_resultNum * _precision).round() / _precision);
+      final String _result = _numberFormat.format(_resultNum);
       _resultText = dropZero(value: _result);
     } catch (e) {
       debugPrint('$e');
