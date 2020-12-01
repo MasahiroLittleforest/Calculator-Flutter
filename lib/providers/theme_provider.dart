@@ -67,6 +67,7 @@ class ThemeProvider with ChangeNotifier {
     accentColor: Colors.blueGrey[700],
     appBarTheme: AppBarTheme(
       brightness: Brightness.light,
+      color: Colors.transparent,
       iconTheme: IconThemeData(
         color: Colors.blueGrey[700],
       ),
@@ -90,6 +91,7 @@ class ThemeProvider with ChangeNotifier {
     accentColor: Colors.grey[400],
     appBarTheme: AppBarTheme(
       brightness: Brightness.dark,
+      color: Colors.transparent,
     ),
     textTheme: TextTheme(
       bodyText2: TextStyle(
@@ -101,9 +103,12 @@ class ThemeProvider with ChangeNotifier {
     ),
   );
 
-  final SystemUiOverlayStyle systemUiOverlayStyleForLight =
-      SystemUiOverlayStyle(
+  static final SystemUiOverlayStyle _systemUiOverlayStyleForLight =
+      SystemUiOverlayStyle.dark.copyWith(
+    // Only in iOS
+    statusBarBrightness: Brightness.light,
     // Only Android && M+
+    statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,
     // Only Android && O+
     systemNavigationBarColor: lightThemeData.scaffoldBackgroundColor,
@@ -113,9 +118,12 @@ class ThemeProvider with ChangeNotifier {
     systemNavigationBarIconBrightness: Brightness.dark,
   );
 
-  final SystemUiOverlayStyle systemUiOverlayStyleForDark =
+  static final SystemUiOverlayStyle _systemUiOverlayStyleForDark =
       SystemUiOverlayStyle.light.copyWith(
+    // Only in iOS
+    statusBarBrightness: Brightness.dark,
     // Only Android && M+
+    statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
     // Only Android && O+
     systemNavigationBarColor: darkThemeData.scaffoldBackgroundColor,
@@ -125,6 +133,7 @@ class ThemeProvider with ChangeNotifier {
     systemNavigationBarIconBrightness: Brightness.light,
   );
 
-  SystemUiOverlayStyle get systemUiOverlayStyle =>
-      _isDarkTheme ? systemUiOverlayStyleForDark : systemUiOverlayStyleForLight;
+  SystemUiOverlayStyle get systemUiOverlayStyle => _isDarkTheme
+      ? _systemUiOverlayStyleForDark
+      : _systemUiOverlayStyleForLight;
 }
