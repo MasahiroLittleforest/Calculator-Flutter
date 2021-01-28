@@ -1,7 +1,8 @@
-import 'package:calculator_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../main.dart';
+import '../models/theme_state/theme_state.dart';
 import '../providers/theme_provider.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class SettingsScreen extends StatelessWidget {
     return Consumer(
       builder: (context, watch, child) {
         final ThemeProvider _themeProvider = watch(themeProvider);
+        final ThemeState _themeState = watch(themeProvider.state);
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -29,23 +31,18 @@ class SettingsScreen extends StatelessWidget {
               ),
               SwitchListTile(
                 title: const Text('Dark theme'),
-                value: _themeProvider.isDarkTheme,
-                onChanged: _themeProvider.usesDeviceTheme
+                value: _themeState.isDarkTheme,
+                onChanged: _themeState.usesDeviceTheme
                     ? null
                     : (bool newVal) {
-                        _themeProvider.isDarkTheme = newVal;
+                        _themeProvider.useDarkTheme(value: newVal);
                       },
               ),
               SwitchListTile(
                 title: const Text('Use device theme'),
-                value: _themeProvider.usesDeviceTheme,
+                value: _themeState.usesDeviceTheme,
                 onChanged: (bool newVal) {
-                  _themeProvider.usesDeviceTheme = newVal;
-                  if (_themeProvider.usesDeviceTheme) {
-                    _themeProvider.isDarkTheme =
-                        MediaQuery.of(context).platformBrightness ==
-                            Brightness.dark;
-                  }
+                  _themeProvider.useDeviceTheme(value: newVal);
                 },
               ),
             ],

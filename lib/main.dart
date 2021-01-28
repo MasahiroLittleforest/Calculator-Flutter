@@ -8,11 +8,11 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import './my_app.dart';
-import './providers/theme_provider.dart';
+import 'providers/theme_provider.dart';
 import './providers/output_provider.dart';
 
-final ChangeNotifierProvider<ThemeProvider> themeProvider =
-    ChangeNotifierProvider((_) => ThemeProvider());
+final StateNotifierProvider<ThemeProvider> themeProvider =
+    StateNotifierProvider((_) => ThemeProvider());
 
 final ChangeNotifierProvider<Output> outputProvider =
     ChangeNotifierProvider((_) => Output());

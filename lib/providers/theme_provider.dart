@@ -1,65 +1,50 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/theme_state/theme_state.dart';
 import '../utils/shared_preferences_keys.dart';
 
-class ThemeProvider with ChangeNotifier {
-  ThemeProvider() {
+class ThemeProvider extends StateNotifier<ThemeState> {
+  ThemeProvider() : super(const ThemeState()) {
     init();
   }
 
+  SharedPreferences prefs;
+
   Future<void> init() async {
-    this.sharedPreferences ??= await SharedPreferences.getInstance();
-    this.usesDeviceTheme =
-        sharedPreferences.getBool(SharedPreferencesKeys.usesDeviceTheme) ??
-            true;
-    this.isDarkTheme =
-        sharedPreferences.getBool(SharedPreferencesKeys.isDarkTheme) ?? false;
+    this.prefs ??= await SharedPreferences.getInstance();
+
+    final bool _usesDeviceTheme =
+        prefs.getBool(SharedPreferencesKeys.usesDeviceTheme);
+    final bool _isDarkTheme = prefs.getBool(SharedPreferencesKeys.isDarkTheme);
+
+    state = state.copyWith(
+      isDarkTheme: _isDarkTheme ?? true,
+      usesDeviceTheme: _usesDeviceTheme ?? false,
+    );
   }
 
-  SharedPreferences sharedPreferences;
-  bool _isDarkTheme;
-  bool _useDeviceTheme;
+  Future<void> useDarkTheme({@required bool value}) async {
+    state = state.copyWith(isDarkTheme: value);
 
-  bool get isDarkTheme => _isDarkTheme;
-  bool get usesDeviceTheme => _useDeviceTheme;
-
-  ThemeMode get themeMode {
-    if (this.usesDeviceTheme) {
-      return ThemeMode.system;
-    }
-    if (this.isDarkTheme) {
-      return ThemeMode.dark;
-    } else {
-      return ThemeMode.light;
-    }
+    prefs ??= await SharedPreferences.getInstance();
+    await prefs.setBool(
+      SharedPreferencesKeys.isDarkTheme,
+      value,
+    );
   }
 
-  set isDarkTheme(bool value) {
-    _isDarkTheme = value;
-    notifyListeners();
-    (() async {
-      sharedPreferences.setBool(
-        SharedPreferencesKeys.isDarkTheme,
-        isDarkTheme,
-      );
-    })();
-    print('Is dark theme: $isDarkTheme');
-    print('Use device theme: $usesDeviceTheme');
-  }
+  Future<void> useDeviceTheme({@required bool value}) async {
+    state = state.copyWith(usesDeviceTheme: value);
 
-  set usesDeviceTheme(bool value) {
-    _useDeviceTheme = value;
-    notifyListeners();
-    (() async {
-      sharedPreferences.setBool(
-        SharedPreferencesKeys.usesDeviceTheme,
-        usesDeviceTheme,
-      );
-    })();
-    print('Is dark theme: $isDarkTheme');
-    print('Use device theme: $usesDeviceTheme');
+    prefs ??= await SharedPreferences.getInstance();
+    await prefs.setBool(
+      SharedPreferencesKeys.usesDeviceTheme,
+      value,
+    );
   }
 
   static final ThemeData lightThemeData = ThemeData(
@@ -135,7 +120,24 @@ class ThemeProvider with ChangeNotifier {
     systemNavigationBarIconBrightness: Brightness.light,
   );
 
-  SystemUiOverlayStyle get systemUiOverlayStyle => _isDarkTheme
-      ? _systemUiOverlayStyleForDark
-      : _systemUiOverlayStyleForLight;
+  SystemUiOverlayStyle getSystemUiOverlayStyle({
+    @required Brightness deviceBrightness,
+  }) {
+    if (state.usesDeviceTheme) {
+      switch (deviceBrightness) {
+        case Brightness.light:
+          return _systemUiOverlayStyleForLight;
+        case Brightness.dark:
+          return _systemUiOverlayStyleForDark;
+        default:
+          return _systemUiOverlayStyleForLight;
+      }
+    } else {
+      if (state.isDarkTheme) {
+        return _systemUiOverlayStyleForDark;
+      } else {
+        return _systemUiOverlayStyleForLight;
+      }
+    }
+  }
 }

@@ -1,8 +1,8 @@
-import 'package:calculator_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/theme_provider.dart';
+import '../main.dart';
+import '../models/theme_state/theme_state.dart';
 import '../providers/output_provider.dart';
 import './neumorphic_emboss_container.dart';
 
@@ -71,10 +71,9 @@ class _OutputDisplayState extends State<OutputDisplay>
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
-        final ThemeProvider _themeProvider = watch(themeProvider);
-        final Color _color = _themeProvider.isDarkTheme
-            ? Colors.grey[850]
-            : Colors.blueGrey[100];
+        final ThemeState _themeState = watch(themeProvider.state);
+        final Color _color =
+            _themeState.isDarkTheme ? Colors.grey[850] : Colors.blueGrey[100];
         final Output _output = watch(outputProvider);
         return NeumorphicEmbossContainer(
           width: _getContainerWidth(),
