@@ -5,10 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/shared_preferences_keys.dart';
 
 class ThemeProvider with ChangeNotifier {
-  ThemeProvider({
-    @required this.sharedPreferences,
-    @required BuildContext context,
-  }) {
+  ThemeProvider() {
+    init();
+  }
+
+  Future<void> init() async {
+    this.sharedPreferences ??= await SharedPreferences.getInstance();
     this.usesDeviceTheme =
         sharedPreferences.getBool(SharedPreferencesKeys.usesDeviceTheme) ??
             true;
@@ -16,7 +18,7 @@ class ThemeProvider with ChangeNotifier {
         sharedPreferences.getBool(SharedPreferencesKeys.isDarkTheme) ?? false;
   }
 
-  final SharedPreferences sharedPreferences;
+  SharedPreferences sharedPreferences;
   bool _isDarkTheme;
   bool _useDeviceTheme;
 

@@ -1,5 +1,6 @@
+import 'package:calculator_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/theme_provider.dart';
 import '../providers/output_provider.dart';
@@ -68,11 +69,13 @@ class _OutputDisplayState extends State<OutputDisplay>
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
-    final Color _color =
-        _themeProvider.isDarkTheme ? Colors.grey[850] : Colors.blueGrey[100];
-    return Consumer<Output>(
-      builder: (BuildContext context, Output output, _) {
+    return Consumer(
+      builder: (context, watch, child) {
+        final ThemeProvider _themeProvider = watch(themeProvider);
+        final Color _color = _themeProvider.isDarkTheme
+            ? Colors.grey[850]
+            : Colors.blueGrey[100];
+        final Output _output = watch(outputProvider);
         return NeumorphicEmbossContainer(
           width: _getContainerWidth(),
           height: _getContainerHeight(),
@@ -87,13 +90,13 @@ class _OutputDisplayState extends State<OutputDisplay>
                   reverse: true,
                   scrollDirection: Axis.horizontal,
                   child: _buildEquationText(
-                    equationText: output.equationText,
+                    equationText: _output.equationText,
                   ),
                 ),
                 SingleChildScrollView(
                   reverse: true,
                   scrollDirection: Axis.horizontal,
-                  child: _buildResultText(resultText: output.resultText),
+                  child: _buildResultText(resultText: _output.resultText),
                 ),
               ],
             ),

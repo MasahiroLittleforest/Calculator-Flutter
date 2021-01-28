@@ -3,14 +3,19 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import './providers/theme_provider.dart';
 import './providers/output_provider.dart';
 import './screens/calculator_screen.dart';
+
+final ChangeNotifierProvider<ThemeProvider> themeProvider =
+    ChangeNotifierProvider((_) => ThemeProvider());
+
+final ChangeNotifierProvider<Output> outputProvider =
+    ChangeNotifierProvider((_) => Output());
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,19 +35,12 @@ Future<void> main() async {
   FlutterError.onError = _crashlytics.recordFlutterError;
   await _crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
 
-  await runZonedGuarded(
-    () async {
+  runZonedGuarded(
+    () {
       FlutterError.onError = _crashlytics.recordFlutterError;
-      final SharedPreferences _sharedPreferences =
-          await SharedPreferences.getInstance();
+
       runApp(
-        ChangeNotifierProvider(
-          create: (BuildContext context) {
-            return ThemeProvider(
-              sharedPreferences: _sharedPreferences,
-              context: context,
-            );
-          },
+        ProviderScope(
           child: MyApp(),
         ),
       );
@@ -68,8 +66,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangePlatformBrightness() {
-    final ThemeProvider _themeProvider =
-        Provider.of<ThemeProvider>(context, listen: false);
+    final ThemeProvider _themeProvider = context.read(themeProvider);
     final Brightness _deviceBrightness =
         WidgetsBinding.instance.window.platformBrightness;
     if (_themeProvider.usesDeviceTheme) {
@@ -86,22 +83,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: _themeProvider.systemUiOverlayStyle,
-      child: ChangeNotifierProvider<Output>(
-        create: (BuildContext _) {
-          return Output();
-        },
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Neumorphic Calculator',
-          themeMode: _themeProvider.themeMode,
-          theme: ThemeProvider.lightThemeData,
-          darkTheme: ThemeProvider.darkThemeData,
-          home: CalculatorScreen(),
-        ),
-      ),
+    return Consumer(
+      builder: (context, watch, child) {
+        final ThemeProvider _themeProvider = watch(themeProvider);
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: _themeProvider.systemUiOverlayStyle,
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Neumorphic Calculator',
+            themeMode: _themeProvider.themeMode,
+            theme: ThemeProvider.lightThemeData,
+            darkTheme: ThemeProvider.darkThemeData,
+            home: CalculatorScreen(),
+          ),
+        );
+      },
     );
   }
 }
