@@ -48,6 +48,7 @@ class ThemeProvider extends StateNotifier<ThemeState> {
   }
 
   Brightness getThemeBrightness(Brightness deviceBrightness) {
+    print('deviceBrightness: $deviceBrightness');
     if (state.usesDeviceTheme) {
       return deviceBrightness;
     } else {
@@ -60,7 +61,9 @@ class ThemeProvider extends StateNotifier<ThemeState> {
   }
 
   SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness deviceBrightness) {
-    switch (getThemeBrightness(deviceBrightness)) {
+    final Brightness _themeBrightness = getThemeBrightness(deviceBrightness);
+    print('themeBrightness: $_themeBrightness');
+    switch (_themeBrightness) {
       case Brightness.light:
         return _systemUiOverlayStyleForLight;
       case Brightness.dark:

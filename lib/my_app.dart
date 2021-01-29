@@ -22,6 +22,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     _widgetsBinding.addObserver(this);
+    _deviceBrightness = _widgetsBinding.window.platformBrightness;
   }
 
   @override
