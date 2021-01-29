@@ -7,11 +7,11 @@ import '../providers/theme_provider.dart';
 import './neumorphic_emboss_container.dart';
 
 class OutputDisplay extends StatefulWidget {
-  final double height;
-
-  OutputDisplay({
+  const OutputDisplay({
     this.height = 120.0,
   });
+
+  final double height;
 
   @override
   _OutputDisplayState createState() => _OutputDisplayState();
@@ -23,14 +23,15 @@ class _OutputDisplayState extends State<OutputDisplay>
     final double _displayWidth = MediaQuery.of(context).size.width;
     final double _displayHeight = MediaQuery.of(context).size.height;
     double _buttonSize = 0;
-    final double _buttonHorizontalPadding = 20;
-    double width = 0;
+    const double _buttonHorizontalPadding = 20;
+
     if (_displayHeight / _displayWidth >= 16 / 10) {
       _buttonSize = _displayWidth / 4.4;
     } else {
       _buttonSize = _displayWidth / 5.5;
     }
-    width = _buttonSize * 4 - _buttonHorizontalPadding;
+
+    final double width = _buttonSize * 4 - _buttonHorizontalPadding;
     return width;
   }
 
@@ -83,7 +84,7 @@ class _OutputDisplayState extends State<OutputDisplay>
           height: _getContainerHeight(),
           color: _color,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.end,

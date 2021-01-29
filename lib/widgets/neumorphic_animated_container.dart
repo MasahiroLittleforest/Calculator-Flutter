@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 
 class NeumorphicAnimatedContainer extends StatefulWidget {
+  NeumorphicAnimatedContainer({
+    this.duration = const Duration(milliseconds: 20),
+    this.width,
+    this.height,
+    this.padding = const EdgeInsets.all(10),
+    this.bevel = 10.0,
+    this.color,
+    this.radius = 10.0,
+    this.child,
+    this.isPressed,
+    this.isLongPressed,
+    this.buttonText,
+  }) : offset = Offset(bevel / 2, bevel / 2);
+
   final Duration duration;
   final double width;
   final double height;
@@ -13,20 +27,6 @@ class NeumorphicAnimatedContainer extends StatefulWidget {
   final bool isPressed;
   final bool isLongPressed;
   final String buttonText;
-
-  NeumorphicAnimatedContainer({
-    this.duration = const Duration(milliseconds: 20),
-    this.width,
-    this.height,
-    this.padding = const EdgeInsets.all(10.0),
-    this.bevel = 10.0,
-    this.color,
-    this.radius = 10.0,
-    this.child,
-    this.isPressed,
-    this.isLongPressed,
-    this.buttonText,
-  }) : this.offset = Offset(bevel / 2, bevel / 2);
 
   @override
   _NeumorphicAnimatedContainerState createState() =>
@@ -120,8 +120,7 @@ class _NeumorphicAnimatedContainerState
 
   @override
   Widget build(BuildContext context) {
-    final Color _color =
-        widget.color == null ? Theme.of(context).backgroundColor : widget.color;
+    final Color _color = widget.color ?? Theme.of(context).backgroundColor;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 20),
       width: widget.width,

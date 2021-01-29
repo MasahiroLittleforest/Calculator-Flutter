@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             themeMode: _themeState.themeMode,
             theme: ThemeProvider.lightThemeData,
             darkTheme: ThemeProvider.darkThemeData,
-            home: CalculatorScreen(),
+            home: const CalculatorScreen(),
           ),
         );
       },

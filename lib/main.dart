@@ -8,8 +8,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import './my_app.dart';
-import 'providers/theme_provider.dart';
-import 'providers/output_provider.dart';
+import './providers/output_provider.dart';
+import './providers/theme_provider.dart';
 
 final StateNotifierProvider<ThemeProvider> themeProvider =
     StateNotifierProvider((_) => ThemeProvider());
@@ -21,7 +21,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
 
@@ -34,8 +34,8 @@ Future<void> main() async {
       FlutterError.onError = _crashlytics.recordFlutterError;
 
       runApp(
-        ProviderScope(
-          child: const MyApp(),
+        const ProviderScope(
+          child: MyApp(),
         ),
       );
     },

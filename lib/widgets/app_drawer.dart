@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info/package_info.dart';
 
-import './neumorphic_container.dart';
 import '../screens/settings_screen.dart';
+import './neumorphic_container.dart';
 
 class AppDrawer extends StatelessWidget {
-  void _launchUrl() async {
+  Future<void> _launchUrl() async {
     const String url = 'https://neumorphic-calculator.web.app';
     if (await canLaunch(url)) {
       await launch(url);
@@ -28,11 +28,11 @@ class AppDrawer extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8),
                     child: Text(
                       'Settings',
                       style: TextStyle(
-                        fontSize: 22.0,
+                        fontSize: 22,
                         color: Theme.of(context).textTheme.bodyText2.color,
                       ),
                     ),
@@ -40,7 +40,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.of(context).push(
+                Navigator.of(context).push<MaterialPageRoute>(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
                       return SettingsScreen();
@@ -55,11 +55,11 @@ class AppDrawer extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8),
                     child: Text(
                       'Licenses',
                       style: TextStyle(
-                        fontSize: 22.0,
+                        fontSize: 22,
                         color: Theme.of(context).textTheme.bodyText2.color,
                       ),
                     ),
@@ -71,7 +71,7 @@ class AppDrawer extends StatelessWidget {
                     await PackageInfo.fromPlatform();
                 final String appName = packageInfo.appName;
                 final String version = packageInfo.version;
-                final double iconSize = 180;
+                const double iconSize = 180;
                 showLicensePage(
                   context: context,
                   applicationName: appName,
@@ -91,11 +91,11 @@ class AppDrawer extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8),
                     child: Text(
                       'Privacy policy',
                       style: TextStyle(
-                        fontSize: 22.0,
+                        fontSize: 22,
                         color: Theme.of(context).textTheme.bodyText2.color,
                       ),
                     ),
@@ -103,7 +103,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               onTap: () async {
-                _launchUrl();
+                await _launchUrl();
                 Navigator.of(context).pop();
               },
             ),

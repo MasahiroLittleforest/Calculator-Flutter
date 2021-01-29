@@ -35,8 +35,8 @@ class OutputProvider extends StateNotifier<Output> {
 
   String dropZero({@required String value}) {
     if (value.contains('.') && (value.endsWith('0') || value.endsWith('.'))) {
-      value = value.substring(0, value.length - 1);
-      return dropZero(value: value);
+      final String _substr = value.substring(0, value.length - 1);
+      return dropZero(value: _substr);
     } else {
       return value;
     }
@@ -62,12 +62,12 @@ class OutputProvider extends StateNotifier<Output> {
       final Expression _expression = _parser.parse(_formattedEquation);
       final ContextModel _contextModel = ContextModel();
       double _evaluationResult =
-          _expression.evaluate(EvaluationType.REAL, _contextModel);
-      final int _precision = pow(10, 10);
-      _evaluationResult =
-          ((_evaluationResult * _precision).round() / _precision);
-      final String _resultText = _numberFormat.format(_evaluationResult);
-      state = state.copyWith(resultText: dropZero(value: _resultText));
+          _expression.evaluate(EvaluationType.REAL, _contextModel) as double;
+      final int _precision = pow(10, 10) as int;
+      _evaluationResult = (_evaluationResult * _precision).round() / _precision;
+      state = state.copyWith(
+        resultText: dropZero(value: _numberFormat.format(_evaluationResult)),
+      );
     } catch (e) {
       debugPrint('$e');
     }
@@ -87,7 +87,7 @@ class OutputProvider extends StateNotifier<Output> {
       clearAll();
       return;
     }
-    if (state.equationText == null || state.equationText.length == 0) {
+    if (state.equationText == null || state.equationText.isEmpty) {
       return;
     }
     if (state.equationText == 'Error' || state.equationText == 'NaN') {
@@ -95,8 +95,9 @@ class OutputProvider extends StateNotifier<Output> {
       return;
     }
     state = state.copyWith(
-        equationText:
-            state.equationText.substring(0, state.equationText.length - 1));
+      equationText:
+          state.equationText.substring(0, state.equationText.length - 1),
+    );
     autoCalculate();
   }
 
@@ -147,7 +148,7 @@ class OutputProvider extends StateNotifier<Output> {
         state = state.copyWith(equationText: state.equationText + buttonText);
       }
     } else {
-      if (state.equationText.length >= 1 &&
+      if (state.equationText.isNotEmpty &&
           (checkIfTextIsOperator(
                   text: state.equationText[state.equationText.length - 1]) ||
               state.isTypingAfterDecimalPoint) &&

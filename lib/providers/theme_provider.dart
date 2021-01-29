@@ -15,7 +15,7 @@ class ThemeProvider extends StateNotifier<ThemeState> {
   SharedPreferences prefs;
 
   Future<void> init() async {
-    this.prefs ??= await SharedPreferences.getInstance();
+    prefs ??= await SharedPreferences.getInstance();
 
     final bool _usesDeviceTheme =
         prefs.getBool(SharedPreferencesKeys.usesDeviceTheme);
@@ -86,7 +86,7 @@ class ThemeProvider extends StateNotifier<ThemeState> {
       bodyText2: TextStyle(
         color: Colors.blueGrey[700],
       ),
-      headline1: TextStyle(
+      headline1: const TextStyle(
         color: Colors.blueGrey,
       ),
       subtitle1: TextStyle(
@@ -99,7 +99,7 @@ class ThemeProvider extends StateNotifier<ThemeState> {
     scaffoldBackgroundColor: Colors.grey[900],
     backgroundColor: Colors.grey[900],
     accentColor: Colors.grey[400],
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       brightness: Brightness.dark,
       color: Colors.transparent,
     ),

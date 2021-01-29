@@ -7,20 +7,20 @@ import '../providers/output_provider.dart';
 import './neumorphic_animated_container.dart';
 
 class NeumorphicButton extends StatefulWidget {
-  final double width;
-  final double height;
-  final String text;
-  final int flex;
-  final double bevel;
-  final Offset blurOffset;
-
   NeumorphicButton({
     this.width,
     this.height,
     @required this.text,
     this.flex = 1,
     this.bevel = 10,
-  }) : this.blurOffset = Offset(bevel / 2, bevel / 2);
+  }) : blurOffset = Offset(bevel / 2, bevel / 2);
+
+  final double width;
+  final double height;
+  final String text;
+  final int flex;
+  final double bevel;
+  final Offset blurOffset;
 
   @override
   _NeumorphicButtonState createState() => _NeumorphicButtonState();
@@ -75,10 +75,10 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
         return Container(
           width: _buttonWidth,
           height: _buttonHeight,
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10),
           child: Listener(
             onPointerDown: (event) async {
-              HapticFeedback.lightImpact();
+              await HapticFeedback.lightImpact();
               setState(() {
                 _isPressed = true;
                 _buttonTextColor = Colors.cyan;
@@ -105,7 +105,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                 print('Long press');
                 if (widget.text == 'DEL') {
                   _buttonTextColor = Colors.grey[800];
-                  HapticFeedback.heavyImpact();
+                  await HapticFeedback.heavyImpact();
                   _outputProvider.clearAll();
                 }
               },

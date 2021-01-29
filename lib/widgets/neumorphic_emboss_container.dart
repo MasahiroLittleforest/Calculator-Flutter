@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NeumorphicEmbossContainer extends StatelessWidget {
-  final double width;
-  final double height;
-  final double bevel;
-  final Color color;
-  final double radius;
-  final Widget child;
-
-  NeumorphicEmbossContainer({
+  const NeumorphicEmbossContainer({
     this.width,
     this.height,
     this.bevel = 10.0,
@@ -16,6 +9,13 @@ class NeumorphicEmbossContainer extends StatelessWidget {
     this.radius = 10.0,
     this.child,
   });
+
+  final double width;
+  final double height;
+  final double bevel;
+  final Color color;
+  final double radius;
+  final Widget child;
 
   List<BoxShadow> getBoxShadows({@required BuildContext context}) {
     final Brightness _brightness = Theme.of(context).brightness;

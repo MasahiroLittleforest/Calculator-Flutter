@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
 class NeumorphicContainer extends StatelessWidget {
+  NeumorphicContainer({
+    this.width,
+    this.height,
+    this.padding = const EdgeInsets.all(10),
+    this.bevel = 10.0,
+    this.color,
+    this.boxShadowColor,
+    this.radius = 10.0,
+    this.child,
+  }) : offset = Offset(bevel / 3, bevel / 3);
+
   final double width;
   final double height;
   final EdgeInsetsGeometry padding;
@@ -10,17 +21,6 @@ class NeumorphicContainer extends StatelessWidget {
   final Color boxShadowColor;
   final double radius;
   final Widget child;
-
-  NeumorphicContainer({
-    this.width,
-    this.height,
-    this.padding = const EdgeInsets.all(10.0),
-    this.bevel = 10.0,
-    this.color,
-    this.boxShadowColor,
-    this.radius = 10.0,
-    this.child,
-  }) : this.offset = Offset(bevel / 3, bevel / 3);
 
   List<BoxShadow> getBoxShadows({@required BuildContext context}) {
     final Brightness _brightness = Theme.of(context).brightness;
