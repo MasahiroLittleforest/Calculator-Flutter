@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 
+import '../models/output/output.dart';
 import '../providers/output_provider.dart';
 import './neumorphic_animated_container.dart';
 
@@ -71,7 +72,8 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
     final double _buttonHeight = _buttonSize;
     return riverpod.Consumer(
       builder: (context, watch, child) {
-        final Output _output = watch(outputProvider);
+        final OutputProvider _outputProvider = watch(outputProvider);
+        final Output _output = watch(outputProvider.state);
         return Container(
           width: _buttonWidth,
           height: _buttonHeight,
@@ -90,7 +92,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                 _isPressed = false;
                 _buttonTextColor = null;
               });
-              _output.onTapped(buttonText: widget.text);
+              _outputProvider.onTapped(buttonText: widget.text);
               print('onPointerUp');
             },
             child: GestureDetector(
@@ -106,7 +108,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                 if (widget.text == 'DEL') {
                   _buttonTextColor = Colors.grey[800];
                   HapticFeedback.heavyImpact();
-                  _output.clearAll();
+                  _outputProvider.clearAll();
                 }
               },
               onLongPressEnd: (details) {

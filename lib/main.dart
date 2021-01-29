@@ -9,13 +9,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import './my_app.dart';
 import 'providers/theme_provider.dart';
-import './providers/output_provider.dart';
+import 'providers/output_provider.dart';
 
 final StateNotifierProvider<ThemeProvider> themeProvider =
     StateNotifierProvider((_) => ThemeProvider());
 
-final ChangeNotifierProvider<Output> outputProvider =
-    ChangeNotifierProvider((_) => Output());
+final StateNotifierProvider<OutputProvider> outputProvider =
+    StateNotifierProvider((_) => OutputProvider());
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

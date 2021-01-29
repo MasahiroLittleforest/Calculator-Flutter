@@ -1,42 +1,36 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-class Output with ChangeNotifier {
-  String _equationText = '';
-  String _resultText = '';
-  double _resultNum = 0;
-  bool _isTypingAfterDecimalPoint = false;
-  final NumberFormat _numberFormat = NumberFormat('#,###');
+import '../models/output/output.dart';
 
-  String get equationText => _equationText;
-  String get resultText => _resultText;
+class OutputProvider extends StateNotifier<Output> {
+  OutputProvider() : super(const Output());
+
+  static final NumberFormat _numberFormat = NumberFormat('#,###');
+
   String get equationLastCharacter => getEquationLastCharacter();
-
-  set equationText(String value) {
-    _equationText = value;
-    notifyListeners();
-  }
-
   String getEquationLastCharacter() {
-    if (_equationText == '') {
+    if (state.equationText == '') {
       return '';
     } else {
-      return _equationText[_equationText.length - 1];
+      return state.equationText[state.equationText.length - 1];
     }
   }
 
   void enter() {
-    if (_resultText == '') {
+    if (state.resultText == '') {
       return;
     }
-    _equationText = _resultText;
-    _resultNum = double.tryParse(_resultText);
-    _resultText = '';
-    _isTypingAfterDecimalPoint = false;
-    notifyListeners();
+    state = state.copyWith(
+      equationText: state.resultText,
+      resultNum: double.tryParse(state.resultText),
+      resultText: '',
+      isTypingAfterDecimalPoint: false,
+    );
   }
 
   String dropZero({@required String value}) {
@@ -49,7 +43,7 @@ class Output with ChangeNotifier {
   }
 
   String _convertOperators() {
-    return _equationText.replaceAll('×', '*').replaceAll('÷', '/');
+    return state.equationText.replaceAll('×', '*').replaceAll('÷', '/');
   }
 
   void autoCalculate() {
@@ -60,46 +54,50 @@ class Output with ChangeNotifier {
           _formattedEquation.substring(0, _formattedEquation.length - 1);
     }
     if (!checkIfEquationContainsOperator(equation: _formattedEquation)) {
-      _resultText = '';
+      state = state.copyWith(resultText: '');
       return;
     }
     try {
       final Parser _parser = Parser();
       final Expression _expression = _parser.parse(_formattedEquation);
       final ContextModel _contextModel = ContextModel();
-      _resultNum = _expression.evaluate(EvaluationType.REAL, _contextModel);
+      double _evaluationResult =
+          _expression.evaluate(EvaluationType.REAL, _contextModel);
       final int _precision = pow(10, 10);
-      _resultNum = ((_resultNum * _precision).round() / _precision);
-      final String _result = _numberFormat.format(_resultNum);
-      _resultText = dropZero(value: _result);
+      _evaluationResult =
+          ((_evaluationResult * _precision).round() / _precision);
+      final String _resultText = _numberFormat.format(_evaluationResult);
+      state = state.copyWith(resultText: dropZero(value: _resultText));
     } catch (e) {
       debugPrint('$e');
     }
   }
 
   void clearAll() {
-    _equationText = '';
-    _resultText = '';
-    _resultNum = 0;
-    _isTypingAfterDecimalPoint = false;
-    notifyListeners();
+    state = state.copyWith(
+      equationText: '',
+      resultText: '',
+      resultNum: 0,
+      isTypingAfterDecimalPoint: false,
+    );
   }
 
   void delete() {
-    if (_equationText.length <= 1) {
+    if (state.equationText.length <= 1) {
       clearAll();
       return;
     }
-    if (_equationText == null || _equationText.length == 0) {
+    if (state.equationText == null || state.equationText.length == 0) {
       return;
     }
-    if (_equationText == 'Error' || _equationText == 'NaN') {
+    if (state.equationText == 'Error' || state.equationText == 'NaN') {
       clearAll();
       return;
     }
-    _equationText = _equationText.substring(0, _equationText.length - 1);
+    state = state.copyWith(
+        equationText:
+            state.equationText.substring(0, state.equationText.length - 1));
     autoCalculate();
-    notifyListeners();
   }
 
   bool checkIfTextIsOperator({@required String text}) {
@@ -126,10 +124,10 @@ class Output with ChangeNotifier {
   }
 
   bool checkIfLastCharacterIsDot() {
-    if (_equationText == '') {
+    if (state.equationText == '') {
       return false;
     }
-    if (_equationText[_equationText.length - 1] == '.') {
+    if (state.equationText[state.equationText.length - 1] == '.') {
       return true;
     } else {
       return false;
@@ -142,38 +140,38 @@ class Output with ChangeNotifier {
     } else if (buttonText == '=') {
       enter();
     } else if (buttonText == '.') {
-      _isTypingAfterDecimalPoint = true;
+      state = state.copyWith(isTypingAfterDecimalPoint: true);
       if (checkIfLastCharacterIsDot()) {
         return;
       } else {
-        equationText += buttonText;
+        state = state.copyWith(equationText: state.equationText + buttonText);
       }
     } else {
-      if (_equationText.length >= 1 &&
+      if (state.equationText.length >= 1 &&
           (checkIfTextIsOperator(
-                  text: _equationText[_equationText.length - 1]) ||
-              _isTypingAfterDecimalPoint) &&
+                  text: state.equationText[state.equationText.length - 1]) ||
+              state.isTypingAfterDecimalPoint) &&
           buttonText == '0') {
-        equationText += buttonText;
+        state = state.copyWith(equationText: state.equationText + buttonText);
         return;
       }
       // 頭に0が2つ以上並ばないようにする
-      if (_resultText == '0' && buttonText == '0') {
-        equationText = buttonText;
+      if (state.resultText == '0' && buttonText == '0') {
+        state = state.copyWith(equationText: buttonText);
       } else if (checkIfTextIsOperator(text: buttonText)) {
         // 1つ前が演算子の時
         if (checkIfTextIsOperator(text: equationLastCharacter)) {
           delete();
         }
-        equationText += buttonText;
+        state = state.copyWith(equationText: state.equationText + buttonText);
         autoCalculate();
       } else {
-        equationText += buttonText;
+        state = state.copyWith(equationText: state.equationText + buttonText);
         autoCalculate();
       }
     }
-    print('Equation text: $equationText');
-    print('Result text: $resultText');
-    print('result: $_resultNum');
+    print('Equation text: ${state.equationText}');
+    print('Result text: ${state.resultText}');
+    print('result: ${state.resultNum}');
   }
 }
