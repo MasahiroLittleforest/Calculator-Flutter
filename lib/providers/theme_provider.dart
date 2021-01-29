@@ -47,6 +47,29 @@ class ThemeProvider extends StateNotifier<ThemeState> {
     );
   }
 
+  Brightness getThemeBrightness(Brightness deviceBrightness) {
+    if (state.usesDeviceTheme) {
+      return deviceBrightness;
+    } else {
+      if (state.isDarkTheme) {
+        return Brightness.dark;
+      } else {
+        return Brightness.light;
+      }
+    }
+  }
+
+  SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness deviceBrightness) {
+    switch (getThemeBrightness(deviceBrightness)) {
+      case Brightness.light:
+        return _systemUiOverlayStyleForLight;
+      case Brightness.dark:
+        return _systemUiOverlayStyleForDark;
+      default:
+        return _systemUiOverlayStyleForLight;
+    }
+  }
+
   static final ThemeData lightThemeData = ThemeData(
     primarySwatch: Colors.blueGrey,
     scaffoldBackgroundColor: Colors.blueGrey[50],
@@ -119,25 +142,4 @@ class ThemeProvider extends StateNotifier<ThemeState> {
     // Only Android && O+
     systemNavigationBarIconBrightness: Brightness.light,
   );
-
-  SystemUiOverlayStyle getSystemUiOverlayStyle({
-    @required Brightness deviceBrightness,
-  }) {
-    if (state.usesDeviceTheme) {
-      switch (deviceBrightness) {
-        case Brightness.light:
-          return _systemUiOverlayStyleForLight;
-        case Brightness.dark:
-          return _systemUiOverlayStyleForDark;
-        default:
-          return _systemUiOverlayStyleForLight;
-      }
-    } else {
-      if (state.isDarkTheme) {
-        return _systemUiOverlayStyleForDark;
-      } else {
-        return _systemUiOverlayStyleForLight;
-      }
-    }
-  }
 }

@@ -25,12 +25,6 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  // SystemChrome.setSystemUIOverlayStyle(
-  //   SystemUiOverlayStyle(
-  //     statusBarColor: Colors.transparent,
-  //   ),
-  // );
-
   final FirebaseCrashlytics _crashlytics = FirebaseCrashlytics.instance;
   FlutterError.onError = _crashlytics.recordFlutterError;
   await _crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);

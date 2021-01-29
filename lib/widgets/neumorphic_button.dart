@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 
-import '../models/output/output.dart';
 import '../providers/output_provider.dart';
 import './neumorphic_animated_container.dart';
 
@@ -73,7 +72,6 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
     return riverpod.Consumer(
       builder: (context, watch, child) {
         final OutputProvider _outputProvider = watch(outputProvider);
-        final Output _output = watch(outputProvider.state);
         return Container(
           width: _buttonWidth,
           height: _buttonHeight,

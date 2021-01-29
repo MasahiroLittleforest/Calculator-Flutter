@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../main.dart';
 import '../models/output/output.dart';
-import '../models/theme_state/theme_state.dart';
+import '../providers/theme_provider.dart';
 import './neumorphic_emboss_container.dart';
 
 class OutputDisplay extends StatefulWidget {
@@ -71,9 +71,12 @@ class _OutputDisplayState extends State<OutputDisplay>
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
-        final ThemeState _themeState = watch(themeProvider.state);
-        final Color _color =
-            _themeState.isDarkTheme ? Colors.grey[850] : Colors.blueGrey[100];
+        final ThemeProvider _themeProvider = watch(themeProvider);
+        final Color _color = _themeProvider.getThemeBrightness(
+                    WidgetsBinding.instance.window.platformBrightness) ==
+                Brightness.dark
+            ? Colors.grey[850]
+            : Colors.blueGrey[100];
         final Output _output = watch(outputProvider.state);
         return NeumorphicEmbossContainer(
           width: _getContainerWidth(),

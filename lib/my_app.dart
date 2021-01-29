@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import './main.dart';
 import './models/theme_state/theme_state.dart';
-import 'providers/theme_provider.dart';
+import './providers/theme_provider.dart';
 import './screens/calculator_screen.dart';
 
 class MyApp extends StatefulWidget {
@@ -15,13 +15,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  Brightness _deviceBrightness =
-      WidgetsBinding.instance.window.platformBrightness;
+  final WidgetsBinding _widgetsBinding = WidgetsBinding.instance;
+  Brightness _deviceBrightness;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    _widgetsBinding.addObserver(this);
   }
 
   @override
@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final ThemeProvider _themeProvider = context.read(themeProvider);
     final ThemeState _themeState = context.read(themeProvider.state);
     setState(() {
-      _deviceBrightness = WidgetsBinding.instance.window.platformBrightness;
+      _deviceBrightness = _widgetsBinding.window.platformBrightness;
     });
     if (_themeState.usesDeviceTheme) {
       _themeProvider.useDarkTheme(value: _deviceBrightness == Brightness.dark);
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    _widgetsBinding.removeObserver(this);
     super.dispose();
   }
 
@@ -49,10 +49,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       builder: (context, watch, child) {
         final ThemeProvider _themeProvider = watch(themeProvider);
         final ThemeState _themeState = watch(themeProvider.state);
+
         return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: _themeProvider.getSystemUiOverlayStyle(
-            deviceBrightness: _deviceBrightness,
-          ),
+          value: _themeProvider.getSystemUiOverlayStyle(_deviceBrightness),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Neumorphic Calculator',
