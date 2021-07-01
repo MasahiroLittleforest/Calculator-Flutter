@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../main.dart';
-import '../models/output/output.dart';
+import '../models/output_state/output_state.dart';
 import '../providers/theme_provider.dart';
 import './neumorphic_emboss_container.dart';
 
@@ -81,7 +81,7 @@ class _OutputDisplayState extends State<OutputDisplay>
               ? Colors.grey[850]!
               : Colors.blueGrey[100]!;
         }
-        final Output _output = watch(outputProvider);
+        final OutputState _output = watch(outputProvider);
         return NeumorphicEmbossContainer(
           width: _getContainerWidth(),
           height: _getContainerHeight(),

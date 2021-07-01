@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'theme_state.dart';
 
@@ -9,11 +9,13 @@ part of 'theme_state.dart';
 
 T _$identity<T>(T value) => value;
 
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
 /// @nodoc
 class _$ThemeStateTearOff {
   const _$ThemeStateTearOff();
 
-// ignore: unused_element
   _ThemeState call({bool isDarkTheme = true, bool usesDeviceTheme = false}) {
     return _ThemeState(
       isDarkTheme: isDarkTheme,
@@ -23,16 +25,16 @@ class _$ThemeStateTearOff {
 }
 
 /// @nodoc
-// ignore: unused_element
 const $ThemeState = _$ThemeStateTearOff();
 
 /// @nodoc
 mixin _$ThemeState {
-  bool get isDarkTheme;
-  bool get usesDeviceTheme;
+  bool get isDarkTheme => throw _privateConstructorUsedError;
+  bool get usesDeviceTheme => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $ThemeStateCopyWith<ThemeState> get copyWith;
+  $ThemeStateCopyWith<ThemeState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -53,15 +55,18 @@ class _$ThemeStateCopyWithImpl<$Res> implements $ThemeStateCopyWith<$Res> {
 
   @override
   $Res call({
-    Object isDarkTheme = freezed,
-    Object usesDeviceTheme = freezed,
+    Object? isDarkTheme = freezed,
+    Object? usesDeviceTheme = freezed,
   }) {
     return _then(_value.copyWith(
-      isDarkTheme:
-          isDarkTheme == freezed ? _value.isDarkTheme : isDarkTheme as bool,
+      isDarkTheme: isDarkTheme == freezed
+          ? _value.isDarkTheme
+          : isDarkTheme // ignore: cast_nullable_to_non_nullable
+              as bool,
       usesDeviceTheme: usesDeviceTheme == freezed
           ? _value.usesDeviceTheme
-          : usesDeviceTheme as bool,
+          : usesDeviceTheme // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -87,25 +92,27 @@ class __$ThemeStateCopyWithImpl<$Res> extends _$ThemeStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object isDarkTheme = freezed,
-    Object usesDeviceTheme = freezed,
+    Object? isDarkTheme = freezed,
+    Object? usesDeviceTheme = freezed,
   }) {
     return _then(_ThemeState(
-      isDarkTheme:
-          isDarkTheme == freezed ? _value.isDarkTheme : isDarkTheme as bool,
+      isDarkTheme: isDarkTheme == freezed
+          ? _value.isDarkTheme
+          : isDarkTheme // ignore: cast_nullable_to_non_nullable
+              as bool,
       usesDeviceTheme: usesDeviceTheme == freezed
           ? _value.usesDeviceTheme
-          : usesDeviceTheme as bool,
+          : usesDeviceTheme // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
 
 /// @nodoc
+
 class _$_ThemeState extends _ThemeState with DiagnosticableTreeMixin {
   const _$_ThemeState({this.isDarkTheme = true, this.usesDeviceTheme = false})
-      : assert(isDarkTheme != null),
-        assert(usesDeviceTheme != null),
-        super._();
+      : super._();
 
   @JsonKey(defaultValue: true)
   @override
@@ -153,15 +160,16 @@ class _$_ThemeState extends _ThemeState with DiagnosticableTreeMixin {
 }
 
 abstract class _ThemeState extends ThemeState {
-  const _ThemeState._() : super._();
   const factory _ThemeState({bool isDarkTheme, bool usesDeviceTheme}) =
       _$_ThemeState;
+  const _ThemeState._() : super._();
 
   @override
-  bool get isDarkTheme;
+  bool get isDarkTheme => throw _privateConstructorUsedError;
   @override
-  bool get usesDeviceTheme;
+  bool get usesDeviceTheme => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$ThemeStateCopyWith<_ThemeState> get copyWith;
+  _$ThemeStateCopyWith<_ThemeState> get copyWith =>
+      throw _privateConstructorUsedError;
 }

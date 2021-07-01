@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/output/output.dart';
+import '../models/output_state/output_state.dart';
 import '../models/theme_state/theme_state.dart';
 import './my_app.dart';
 import './providers/output_provider.dart';
@@ -16,7 +16,7 @@ import './providers/theme_provider.dart';
 final StateNotifierProvider<ThemeProvider, ThemeState> themeProvider =
     StateNotifierProvider((_) => ThemeProvider());
 
-final StateNotifierProvider<OutputProvider, Output> outputProvider =
+final StateNotifierProvider<OutputProvider, OutputState> outputProvider =
     StateNotifierProvider((_) => OutputProvider());
 
 Future<void> main() async {

@@ -1,16 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-import '../models/output/output.dart';
+import '../models/output_state/output_state.dart';
 
-class OutputProvider extends StateNotifier<Output> {
-  OutputProvider() : super(const Output());
+class OutputProvider extends StateNotifier<OutputState> {
+  OutputProvider() : super(const OutputState());
 
-  static final NumberFormat _numberFormat = NumberFormat('#,###');
+  static final NumberFormat _numberFormat = NumberFormat('#,###.#')
+    ..maximumFractionDigits = 10;
 
   String get equationLastCharacter => getEquationLastCharacter();
   String getEquationLastCharacter() {
@@ -21,13 +20,17 @@ class OutputProvider extends StateNotifier<Output> {
     }
   }
 
+  String removeCommas(String stringifiedNumber) {
+    return stringifiedNumber.replaceAll(',', '');
+  }
+
   void enter() {
     if (state.resultText == '') {
       return;
     }
     state = state.copyWith(
       equationText: state.resultText,
-      resultNum: double.tryParse(state.resultText) ?? 0,
+      resultNum: double.tryParse(removeCommas(state.resultText)) ?? 0,
       resultText: '',
       isTypingAfterDecimalPoint: false,
     );
@@ -48,6 +51,7 @@ class OutputProvider extends StateNotifier<Output> {
 
   void autoCalculate() {
     String _formattedEquation = _convertOperators();
+    _formattedEquation = removeCommas(_formattedEquation);
     print('Formatted equation: $_formattedEquation');
     if (checkIfTextIsOperator(text: equationLastCharacter)) {
       _formattedEquation =
@@ -61,12 +65,11 @@ class OutputProvider extends StateNotifier<Output> {
       final Parser _parser = Parser();
       final Expression _expression = _parser.parse(_formattedEquation);
       final ContextModel _contextModel = ContextModel();
-      double _evaluationResult =
+      final double _evaluationResult =
           _expression.evaluate(EvaluationType.REAL, _contextModel) as double;
-      final int _precision = pow(10, 10) as int;
-      _evaluationResult = (_evaluationResult * _precision).round() / _precision;
       state = state.copyWith(
-        resultText: dropZero(value: _numberFormat.format(_evaluationResult)),
+        resultText: _numberFormat
+            .format(num.parse(dropZero(value: _evaluationResult.toString()))),
       );
     } catch (e) {
       debugPrint('$e');
@@ -87,7 +90,7 @@ class OutputProvider extends StateNotifier<Output> {
       clearAll();
       return;
     }
-    if (state.equationText == null || state.equationText.isEmpty) {
+    if (state.equationText.isEmpty) {
       return;
     }
     if (state.equationText == 'Error' || state.equationText == 'NaN') {
