@@ -47,7 +47,7 @@ class _OutputDisplayState extends State<OutputDisplay>
     return height;
   }
 
-  Widget _buildEquationText({@required String equationText}) {
+  Widget _buildEquationText({required String equationText}) {
     return Text(
       equationText,
       style: TextStyle(
@@ -57,13 +57,13 @@ class _OutputDisplayState extends State<OutputDisplay>
     );
   }
 
-  Widget _buildResultText({@required String resultText}) {
+  Widget _buildResultText({required String resultText}) {
     return Text(
       resultText,
       style: TextStyle(
         fontSize: MediaQuery.of(context).size.width * 0.07,
         fontWeight: FontWeight.bold,
-        color: Theme.of(context).textTheme.headline1.color,
+        color: Theme.of(context).textTheme.headline1?.color,
       ),
     );
   }
@@ -72,13 +72,16 @@ class _OutputDisplayState extends State<OutputDisplay>
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
-        final ThemeProvider _themeProvider = watch(themeProvider);
-        final Color _color = _themeProvider.getThemeBrightness(
-                    WidgetsBinding.instance.window.platformBrightness) ==
-                Brightness.dark
-            ? Colors.grey[850]
-            : Colors.blueGrey[100];
-        final Output _output = watch(outputProvider.state);
+        final ThemeProvider _themeProvider = watch(themeProvider.notifier);
+        Color? _color;
+        if (WidgetsBinding.instance != null) {
+          _color = _themeProvider.getThemeBrightness(
+                      WidgetsBinding.instance!.window.platformBrightness) ==
+                  Brightness.dark
+              ? Colors.grey[850]!
+              : Colors.blueGrey[100]!;
+        }
+        final Output _output = watch(outputProvider);
         return NeumorphicEmbossContainer(
           width: _getContainerWidth(),
           height: _getContainerHeight(),

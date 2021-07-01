@@ -15,23 +15,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  final WidgetsBinding _widgetsBinding = WidgetsBinding.instance;
-  Brightness _deviceBrightness;
+  final WidgetsBinding? _widgetsBinding = WidgetsBinding.instance;
+  Brightness? _deviceBrightness;
 
   @override
   void initState() {
     super.initState();
-    _widgetsBinding.addObserver(this);
-    _deviceBrightness = _widgetsBinding.window.platformBrightness;
+    _widgetsBinding?.addObserver(this);
+    if (_widgetsBinding != null) {
+      _deviceBrightness = _widgetsBinding!.window.platformBrightness;
+    }
   }
 
   @override
   void didChangePlatformBrightness() {
-    final ThemeProvider _themeProvider = context.read(themeProvider);
-    final ThemeState _themeState = context.read(themeProvider.state);
-    setState(() {
-      _deviceBrightness = _widgetsBinding.window.platformBrightness;
-    });
+    final ThemeProvider _themeProvider = context.read(themeProvider.notifier);
+    final ThemeState _themeState = context.read(themeProvider);
+    if (_widgetsBinding != null) {
+      setState(() {
+        _deviceBrightness = _widgetsBinding!.window.platformBrightness;
+      });
+    }
+
     if (_themeState.usesDeviceTheme) {
       _themeProvider.useDarkTheme(value: _deviceBrightness == Brightness.dark);
     }
@@ -40,7 +45,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    _widgetsBinding.removeObserver(this);
+    _widgetsBinding?.removeObserver(this);
     super.dispose();
   }
 
@@ -48,8 +53,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
-        final ThemeProvider _themeProvider = watch(themeProvider);
-        final ThemeState _themeState = watch(themeProvider.state);
+        final ThemeProvider _themeProvider = watch(themeProvider.notifier);
+        final ThemeState _themeState = watch(themeProvider);
 
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: _themeProvider.getSystemUiOverlayStyle(_deviceBrightness),

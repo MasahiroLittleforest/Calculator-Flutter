@@ -27,13 +27,13 @@ class OutputProvider extends StateNotifier<Output> {
     }
     state = state.copyWith(
       equationText: state.resultText,
-      resultNum: double.tryParse(state.resultText),
+      resultNum: double.tryParse(state.resultText) ?? 0,
       resultText: '',
       isTypingAfterDecimalPoint: false,
     );
   }
 
-  String dropZero({@required String value}) {
+  String dropZero({required String value}) {
     if (value.contains('.') && (value.endsWith('0') || value.endsWith('.'))) {
       final String _substr = value.substring(0, value.length - 1);
       return dropZero(value: _substr);
@@ -101,7 +101,7 @@ class OutputProvider extends StateNotifier<Output> {
     autoCalculate();
   }
 
-  bool checkIfTextIsOperator({@required String text}) {
+  bool checkIfTextIsOperator({required String text}) {
     if (text == '+' ||
         text == '-' ||
         text == '×' ||
@@ -113,7 +113,7 @@ class OutputProvider extends StateNotifier<Output> {
     }
   }
 
-  bool checkIfEquationContainsOperator({@required String equation}) {
+  bool checkIfEquationContainsOperator({required String equation}) {
     if (equation.contains('+') ||
         equation.contains('-') ||
         equation.contains('*') ||
@@ -135,7 +135,7 @@ class OutputProvider extends StateNotifier<Output> {
     }
   }
 
-  void onTapped({@required String buttonText}) {
+  void onTapped({required String buttonText}) {
     if (buttonText == 'DEL') {
       delete();
     } else if (buttonText == '=') {

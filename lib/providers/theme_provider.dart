@@ -12,14 +12,15 @@ class ThemeProvider extends StateNotifier<ThemeState> {
     init();
   }
 
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   Future<void> init() async {
     prefs ??= await SharedPreferences.getInstance();
 
-    final bool _usesDeviceTheme =
-        prefs.getBool(SharedPreferencesKeys.usesDeviceTheme);
-    final bool _isDarkTheme = prefs.getBool(SharedPreferencesKeys.isDarkTheme);
+    final bool? _usesDeviceTheme =
+        prefs!.getBool(SharedPreferencesKeys.usesDeviceTheme);
+    final bool? _isDarkTheme =
+        prefs!.getBool(SharedPreferencesKeys.isDarkTheme);
 
     state = state.copyWith(
       isDarkTheme: _isDarkTheme ?? true,
@@ -27,21 +28,21 @@ class ThemeProvider extends StateNotifier<ThemeState> {
     );
   }
 
-  Future<void> useDarkTheme({@required bool value}) async {
+  Future<void> useDarkTheme({required bool value}) async {
     state = state.copyWith(isDarkTheme: value);
 
     prefs ??= await SharedPreferences.getInstance();
-    await prefs.setBool(
+    await prefs!.setBool(
       SharedPreferencesKeys.isDarkTheme,
       value,
     );
   }
 
-  Future<void> useDeviceTheme({@required bool value}) async {
+  Future<void> useDeviceTheme({required bool value}) async {
     state = state.copyWith(usesDeviceTheme: value);
 
     prefs ??= await SharedPreferences.getInstance();
-    await prefs.setBool(
+    await prefs!.setBool(
       SharedPreferencesKeys.usesDeviceTheme,
       value,
     );
@@ -60,7 +61,11 @@ class ThemeProvider extends StateNotifier<ThemeState> {
     }
   }
 
-  SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness deviceBrightness) {
+  SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness? deviceBrightness) {
+    if (deviceBrightness == null) {
+      return _systemUiOverlayStyleForLight;
+    }
+
     final Brightness _themeBrightness = getThemeBrightness(deviceBrightness);
     print('themeBrightness: $_themeBrightness');
     switch (_themeBrightness) {
@@ -68,8 +73,6 @@ class ThemeProvider extends StateNotifier<ThemeState> {
         return _systemUiOverlayStyleForLight;
       case Brightness.dark:
         return _systemUiOverlayStyleForDark;
-      default:
-        return _systemUiOverlayStyleForLight;
     }
   }
 

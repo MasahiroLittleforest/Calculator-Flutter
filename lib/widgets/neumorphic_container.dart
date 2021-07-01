@@ -7,33 +7,33 @@ class NeumorphicContainer extends StatelessWidget {
     this.padding = const EdgeInsets.all(10),
     this.bevel = 10.0,
     this.color,
-    this.boxShadowColor,
+    this.boxShadowColors,
     this.radius = 10.0,
     this.child,
   }) : offset = Offset(bevel / 3, bevel / 3);
 
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final EdgeInsetsGeometry padding;
   final double bevel;
   final Offset offset;
-  final Color color;
-  final Color boxShadowColor;
+  final Color? color;
+  final List<Color>? boxShadowColors;
   final double radius;
-  final Widget child;
+  final Widget? child;
 
-  List<BoxShadow> getBoxShadows({@required BuildContext context}) {
+  List<BoxShadow> getBoxShadows({required BuildContext context}) {
     final Brightness _brightness = Theme.of(context).brightness;
     if (_brightness == Brightness.light) {
       return [
         BoxShadow(
           offset: -offset,
-          color: Colors.white,
+          color: boxShadowColors?.first ?? Colors.white,
           blurRadius: bevel / 3,
         ),
         BoxShadow(
           offset: offset,
-          color: Colors.blueGrey[100],
+          color: boxShadowColors?.last ?? Colors.blueGrey[100]!,
           blurRadius: bevel / 3,
         ),
       ];
@@ -41,12 +41,12 @@ class NeumorphicContainer extends StatelessWidget {
       return [
         BoxShadow(
           offset: -offset,
-          color: Colors.grey[850],
+          color: boxShadowColors?.first ?? Colors.grey[850]!,
           blurRadius: bevel / 3,
         ),
         BoxShadow(
           offset: offset,
-          color: Colors.black,
+          color: boxShadowColors?.last ?? Colors.black,
           blurRadius: bevel / 3,
         ),
       ];
@@ -60,7 +60,7 @@ class NeumorphicContainer extends StatelessWidget {
       height: height,
       padding: padding,
       decoration: BoxDecoration(
-        color: Theme.of(context).backgroundColor,
+        color: color ?? Theme.of(context).backgroundColor,
         borderRadius: BorderRadius.circular(radius),
         boxShadow: getBoxShadows(context: context),
       ),

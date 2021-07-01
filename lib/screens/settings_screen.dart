@@ -10,8 +10,8 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
-        final ThemeProvider _themeProvider = watch(themeProvider);
-        final ThemeState _themeState = watch(themeProvider.state);
+        final ThemeProvider _themeProvider = watch(themeProvider.notifier);
+        final ThemeState _themeState = watch(themeProvider);
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
                 title: Text(
                   'Theme',
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText2.color,
+                    color: Theme.of(context).textTheme.bodyText2?.color,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),

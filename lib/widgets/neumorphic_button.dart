@@ -10,13 +10,13 @@ class NeumorphicButton extends StatefulWidget {
   NeumorphicButton({
     this.width,
     this.height,
-    @required this.text,
+    required this.text,
     this.flex = 1,
     this.bevel = 10,
   }) : blurOffset = Offset(bevel / 2, bevel / 2);
 
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final String text;
   final int flex;
   final double bevel;
@@ -29,7 +29,7 @@ class NeumorphicButton extends StatefulWidget {
 class _NeumorphicButtonState extends State<NeumorphicButton> {
   bool _isPressed = false;
   bool _isLongPressed = false;
-  Color _buttonTextColor;
+  Color? _buttonTextColor;
 
   double _getButtonSize() {
     final double _displayWidth = MediaQuery.of(context).size.width;
@@ -44,8 +44,8 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
   }
 
   double _getTextSize({
-    @required String buttonText,
-    @required double buttonSize,
+    required String buttonText,
+    required double buttonSize,
   }) {
     double textSize;
     if (buttonText == 'DEL') {
@@ -71,7 +71,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
     final double _buttonHeight = _buttonSize;
     return riverpod.Consumer(
       builder: (context, watch, child) {
-        final OutputProvider _outputProvider = watch(outputProvider);
+        final OutputProvider _outputProvider = watch(outputProvider.notifier);
         return Container(
           width: _buttonWidth,
           height: _buttonHeight,
@@ -104,7 +104,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
               onLongPress: () async {
                 print('Long press');
                 if (widget.text == 'DEL') {
-                  _buttonTextColor = Colors.grey[800];
+                  _buttonTextColor = Colors.grey[800]!;
                   await HapticFeedback.heavyImpact();
                   _outputProvider.clearAll();
                 }

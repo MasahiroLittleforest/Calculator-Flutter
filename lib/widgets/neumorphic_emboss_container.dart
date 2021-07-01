@@ -10,14 +10,14 @@ class NeumorphicEmbossContainer extends StatelessWidget {
     this.child,
   });
 
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final double bevel;
-  final Color color;
+  final Color? color;
   final double radius;
-  final Widget child;
+  final Widget? child;
 
-  List<BoxShadow> getBoxShadows({@required BuildContext context}) {
+  List<BoxShadow> getBoxShadows({required BuildContext context}) {
     final Brightness _brightness = Theme.of(context).brightness;
     final List<BoxShadow> lightThemeBoxShadows = [
       BoxShadow(
@@ -27,14 +27,14 @@ class NeumorphicEmbossContainer extends StatelessWidget {
       ),
       BoxShadow(
         offset: Offset(-(bevel / 4), -(bevel / 4)),
-        color: Colors.blueGrey[300],
+        color: Colors.blueGrey[300]!,
         blurRadius: bevel / 4,
       ),
     ];
     final List<BoxShadow> darkThemeBoxShadows = [
       BoxShadow(
         offset: Offset(bevel / 4, bevel / 4),
-        color: Colors.grey[800],
+        color: Colors.grey[800]!,
         blurRadius: bevel / 4,
       ),
       BoxShadow(

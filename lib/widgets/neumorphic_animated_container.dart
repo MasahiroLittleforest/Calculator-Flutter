@@ -10,20 +10,20 @@ class NeumorphicAnimatedContainer extends StatefulWidget {
     this.color,
     this.radius = 10.0,
     this.child,
-    this.isPressed,
-    this.isLongPressed,
-    this.buttonText,
+    this.isPressed = false,
+    this.isLongPressed = false,
+    required this.buttonText,
   }) : offset = Offset(bevel / 2, bevel / 2);
 
   final Duration duration;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final EdgeInsetsGeometry padding;
   final double bevel;
   final Offset offset;
-  final Color color;
+  final Color? color;
   final double radius;
-  final Widget child;
+  final Widget? child;
   final bool isPressed;
   final bool isLongPressed;
   final String buttonText;
@@ -35,7 +35,7 @@ class NeumorphicAnimatedContainer extends StatefulWidget {
 
 class _NeumorphicAnimatedContainerState
     extends State<NeumorphicAnimatedContainer> {
-  List<BoxShadow> getBoxShadows({@required bool isPressed}) {
+  List<BoxShadow>? getBoxShadows({required bool isPressed}) {
     if (isPressed) {
       return null;
     }
@@ -47,14 +47,14 @@ class _NeumorphicAnimatedContainerState
       ),
       BoxShadow(
         offset: widget.offset,
-        color: Colors.blueGrey[300],
+        color: Colors.blueGrey[300]!,
         blurRadius: widget.bevel,
       ),
     ];
     final List<BoxShadow> darkThemeBoxShadows = [
       BoxShadow(
         offset: -widget.offset,
-        color: Colors.grey[850],
+        color: Colors.grey[850]!,
         blurRadius: widget.bevel,
       ),
       BoxShadow(
@@ -72,25 +72,25 @@ class _NeumorphicAnimatedContainerState
   }
 
   final List<Color> _accentGradientColors = [
-    Colors.tealAccent[700],
-    Colors.tealAccent[400],
+    Colors.tealAccent[700]!,
+    Colors.tealAccent[400]!,
     Colors.tealAccent,
   ];
   final List<Color> _lightGradientColors = [
-    Colors.blueGrey[200],
-    Colors.blueGrey[100],
-    Colors.blueGrey[50],
+    Colors.blueGrey[200]!,
+    Colors.blueGrey[100]!,
+    Colors.blueGrey[50]!,
   ];
   final List<Color> _darkGradientColors = [
     Colors.black,
-    Colors.grey[900],
-    Colors.grey[850],
+    Colors.grey[900]!,
+    Colors.grey[850]!,
   ];
 
-  LinearGradient _getGradient({
-    @required bool isPressed,
-    @required bool isLongPressed,
-    @required String buttonText,
+  LinearGradient? _getGradient({
+    required bool isPressed,
+    required bool isLongPressed,
+    required String buttonText,
   }) {
     final List<double> _stops = [
       0.0,

@@ -33,7 +33,7 @@ class AppDrawer extends StatelessWidget {
                       'Settings',
                       style: TextStyle(
                         fontSize: 22,
-                        color: Theme.of(context).textTheme.bodyText2.color,
+                        color: Theme.of(context).textTheme.bodyText2?.color,
                       ),
                     ),
                   ),
@@ -60,7 +60,7 @@ class AppDrawer extends StatelessWidget {
                       'Licenses',
                       style: TextStyle(
                         fontSize: 22,
-                        color: Theme.of(context).textTheme.bodyText2.color,
+                        color: Theme.of(context).textTheme.bodyText2?.color,
                       ),
                     ),
                   ),
@@ -96,7 +96,7 @@ class AppDrawer extends StatelessWidget {
                       'Privacy policy',
                       style: TextStyle(
                         fontSize: 22,
-                        color: Theme.of(context).textTheme.bodyText2.color,
+                        color: Theme.of(context).textTheme.bodyText2?.color,
                       ),
                     ),
                   ),

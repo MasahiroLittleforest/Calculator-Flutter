@@ -5,7 +5,7 @@ import '../widgets/buttons.dart';
 import '../widgets/output_display.dart';
 
 class CalculatorScreen extends StatefulWidget {
-  const CalculatorScreen({Key key}) : super(key: key);
+  const CalculatorScreen({Key? key}) : super(key: key);
 
   @override
   _CalculatorScreenState createState() => _CalculatorScreenState();
